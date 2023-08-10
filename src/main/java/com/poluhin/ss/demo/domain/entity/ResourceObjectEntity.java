@@ -9,12 +9,14 @@ import org.springframework.stereotype.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(schema = "SECURITY_TEST", name = "RECOURCE_OBJECTS")
 public class ResourceObjectEntity {
 
     @Id
+    @Column(name = "ID")
     private Integer id;
+    @Column(name = "recource_value")
     private String value;
+    @Column(name = "PATH")
     private String path;
-
-
 }

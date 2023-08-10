@@ -1,23 +1,23 @@
 spring:
-
-  security:
-    user:
-      password: default-pass
-
-
   jpa:
     properties:
       hibernate:
         globally_quoted_identifiers: true
+        default_schema: SECURITY_TEST
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create-drop
-
+      ddl-auto: update
   datasource:
-    url: jdbc:h2:mem:ss
+    url: jdbc:h2:mem:ss;INIT=RUNSCRIPT FROM 'src/main/resources/V1__Initial.sql'\;
     driver-class-name: org.h2.Driver
-    username:
+    username: sa
     password:
+  h2:
+    console:
+      enabled: true
 
 server:
   port: 9000
+jwt:
+  secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
+  lifetime: 10m
