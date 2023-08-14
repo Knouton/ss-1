@@ -1,7 +1,9 @@
 package com.poluhin.ss.demo.controller;
 
+import static org.springframework.http.ResponseEntity.ok;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,18 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class InfoController {
 
 	@GetMapping("/secured")
-	public String securedData() {
-		return "secured data";
+	public ResponseEntity<String> securedData() {
+		return ok("secured data");
 	}
 
 	@GetMapping("/unsecured")
-	public String unsecuredData() {
-		return "unsecured data";
+	public ResponseEntity<String> unsecuredData() {
+		return ok("unsecured data");
 	}
 
 	@GetMapping("/admin")
-	public String adminData() {
-		return "admin data";
+	public ResponseEntity<String> adminData() {
+		return ok("admin data");
 	}
 
 }

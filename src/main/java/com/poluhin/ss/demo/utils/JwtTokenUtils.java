@@ -3,6 +3,9 @@ package com.poluhin.ss.demo.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,13 +20,16 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenUtils {
-
 	@Value("${jwt.secret}")
 	private String secret;
 
 	@Value("${jwt.lifetime}")
 	private Duration jwtLifetime;
 
+	private Key getSigningKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(this.secret);
+		return Keys.hmacShaKeyFor(keyBytes);
+	}
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
 		List<String> rolesList = userDetails.getAuthorities().stream()
@@ -33,12 +39,13 @@ public class JwtTokenUtils {
 
 		Date issuedDate = new Date();
 		Date expiredDate = new Date(issuedDate.getTime() + jwtLifetime.toMillis());
+
 		return Jwts.builder()
 				.setClaims(claims)
 				.setSubject(userDetails.getUsername())
 				.setIssuedAt(issuedDate)
 				.setExpiration(expiredDate)
-				.signWith(SignatureAlgorithm.HS256, secret)
+				.signWith(getSigningKey())
 				.compact();
 	}
 
@@ -51,8 +58,9 @@ public class JwtTokenUtils {
 	}
 
 	private Claims getAllClaimsFromToken(String token) {
-		return Jwts.parser()
-				.setSigningKey(secret)
+		return Jwts.parserBuilder()
+				.setSigningKey(getSigningKey())
+				.build()
 				.parseClaimsJws(token)
 				.getBody();
 	}
