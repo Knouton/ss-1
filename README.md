@@ -5,9 +5,9 @@
 {"username" : "admin", "password" : 100}
 По http://localhost:9000/auth
 2. Получить JWT token, с ним ходить по другим url:
-/info/admin
+/info/admin,
 /resource/{id}
-и тд
+ и тд
 
 Для записи в БД используется /resource
 Пример json для отправки:
